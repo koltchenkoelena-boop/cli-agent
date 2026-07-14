@@ -385,8 +385,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     loop {
         tokio::select! {
             Some(line) = cli_rx.recv() => {
-                process_task(&client, &mut history, line, Some(&event_tx)).await;
-                println!();
+                if line.eq_ignore_ascii_case("exit") {
+                    let _ = shutdown_tx.send(true);
+                    let _ = event_tx.send(FrontendEvent::AgentMessage {
+                        content: "[System] Сервер завершает работу...".to_string(),
+                    });
+                    // Wait a bit for the server to shut down
+                    tokio::time::sleep(std::time::Duration::from_millis(200)).await;
+                    break;
+                } else {
+                    process_task(&client, &mut history, line, Some(&event_tx)).await;
+                    println!();
+                }
             }
             Some(cmd) = cmd_rx.recv() => match cmd {
                 ClientCommand::StartTask { prompt } => {
