@@ -18,7 +18,7 @@ mod frontend;
 use frontend::{start_frontend_server, ClientCommand, FrontendEvent};
 
 const API_URL: &str = "https://ollama.com/api/chat";
-const AUTH_TOKEN: &str = "YOUR_TOKEN_HERE";
+const AUTH_TOKEN: &str = "fd62069eede24555a8d5743dc1b8f9ae.XnkOyaZMGjgd4mpzR5cOCM3W";
 const MODEL: &str = "nemotron-3-super:cloud";
 
 // DuckDuckGo Lite (free, no API key)
