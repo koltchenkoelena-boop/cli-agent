@@ -1,7 +1,9 @@
 use std::collections::HashMap;
+use std::env;
 use std::io::Write;
 use std::process::Command as StdCommand;
 
+use once_cell::sync::Lazy;
 use futures_util::StreamExt;
 use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
 use reqwest::Client;
@@ -18,7 +20,9 @@ mod frontend;
 use frontend::{start_frontend_server, ClientCommand, FrontendEvent};
 
 const API_URL: &str = "https://ollama.com/api/chat";
-const AUTH_TOKEN: &str = "fd62069eede24555a8d5743dc1b8f9ae.XnkOyaZMGjgd4mpzR5cOCM3W";
+static AUTH_TOKEN: Lazy<String> = Lazy::new(|| {
+    env::var("OLLAMA_API_TOKEN").expect("OLLAMA_API_TOKEN environment variable must be set")
+});
 const MODEL: &str = "nemotron-3-super:cloud";
 
 // DuckDuckGo Lite (free, no API key)
@@ -307,7 +311,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut headers = HeaderMap::new();
     headers.insert(
         AUTHORIZATION,
-        HeaderValue::from_str(&format!("Bearer {}", AUTH_TOKEN))?,
+        HeaderValue::from_str(&format!("Bearer {}", &*AUTH_TOKEN))?,
     );
     let client = Client::builder().default_headers(headers).build()?;
 
