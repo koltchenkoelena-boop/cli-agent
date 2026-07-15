@@ -198,6 +198,7 @@ dependencies = [
  "chrono",
  "colored",
  "futures-util",
+ "once_cell",
  "reqwest",
  "rustyline",
  "scraper",
