@@ -246,9 +246,9 @@ pub fn start_frontend_server() -> (
         .with_state(state);
 
     tokio::spawn(async move {
-        free_port_local(8080);
+        free_port_local(9090);
 
-        let listener = match tokio::net::TcpListener::bind("0.0.0.0:8080").await {
+        let listener = match tokio::net::TcpListener::bind("0.0.0.0:9090").await {
             Ok(l) => l,
             Err(e) => {
                 tracing::error!("Не удалось привязать фронтенд-сервер: {e}");
@@ -256,7 +256,7 @@ pub fn start_frontend_server() -> (
             }
         };
 
-        tracing::info!("Фронтенд-сервер на http://127.0.0.1:8080");
+        tracing::info!("Фронтенд-сервер на http://127.0.0.1:9090");
 
         if let Err(e) = axum::serve(listener, app)
             .with_graceful_shutdown(async move {
